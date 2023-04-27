@@ -457,6 +457,21 @@ server {
 #              try_files \$uri \$uri/ =404;
 #       }
 }
+server {
+	listen 443 ssl http2;
+	listen [::]:443 ssl http2;
+	server_name rundeck.coursegna.com;
+	ssl_certificate "/etc/certs/cert.pem";
+        ssl_certificate_key "/etc/certs/key.pem";
+        ssl_session_cache shared:SSL:1m;
+        ssl_session_timeout  10m;
+	location / {
+   	proxy_pass http://localhost:4440;
+   	proxy_set_header X-Forwarded-Host $host:$server_port;
+   	proxy_set_header X-Forwarded-Server $host;
+   	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+ 	}
+}
 
 server {
        listen 80 default_server;
