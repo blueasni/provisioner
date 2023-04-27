@@ -30,7 +30,8 @@ EOF
 cat <<EOF > $LOC/host_vars/localhost
 ---
 # file: group_vars/localhost
-server_pub_ip: "$(ip -4 addr | sed -ne 's|^.* inet \([^/]*\)/.* scope global.*$|\1|p' | awk '{print $1}' | head -1)"
+#server_pub_ip: "$(ip -4 addr | sed -ne 's|^.* inet \([^/]*\)/.* scope global.*$|\1|p' | awk '{print $1}' | head -1)"
+server_pub_ip: "wireguard.coursegna.com"
 server_nic: "$(ip -4 route ls | grep default | grep -Po '(?<=dev )(\S+)' | head -1)"
 server_wg_nic: "wg0"
 server_wg_ipv4: "10.67.67.1"
@@ -526,7 +527,7 @@ cat <<EOF > $LOC/firewall_install.yaml
   community.general.ufw:
     rule: allow
     port: '{{ random_port }}'
-    proto: tcp
+    proto: udp
 
 - name: Allow all access to HTTP port 
   community.general.ufw:
